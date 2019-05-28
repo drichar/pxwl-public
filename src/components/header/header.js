@@ -1,38 +1,43 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
-import posed from 'react-pose';
 import { Container } from './header.css';
 import Title from 'components/title';
 import Nav from 'components/header/nav';
 
-// Example of a component-specific page transition
-const AnimatedContainer = posed.div({
-  enter: {
-    y: 0,
-    transition: {
-      ease: 'easeInOut',
-    },
-  },
-  exit: {
-    y: '-100%',
-    transition: {
-      ease: 'easeInOut',
-    },
-  },
-});
+class Header extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-const Header = ({ title }) => (
-  <AnimatedContainer>
-    <Container>
-      <Link to="/">
-        <Title as="h1">{title}</Title>
-      </Link>
+  handleScroll = () => {
+    this.setState({ scroll: window.scrollY });
+  };
 
-      <Nav />
-    </Container>
-  </AnimatedContainer>
-);
+  componentDidMount() {
+    const element = document.querySelector('header');
+
+    this.setState({ top: element.offsetTop });
+
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  render() {
+    const { title } = this.props;
+    const { scroll, top } = this.state;
+
+    return (
+      <Container className={scroll > top ? 'fixed-nav' : ''}>
+        <Link to="/">
+          <Title as="h1">{title}</Title>
+        </Link>
+
+        <Nav />
+      </Container>
+    );
+  }
+}
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
