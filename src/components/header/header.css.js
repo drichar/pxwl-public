@@ -15,7 +15,7 @@ export const Container = styled.header`
   z-index: 9;
 
   &.fixed-nav {
-    background-color: ${theme.midnightBase};
+    background-color: ${theme.black};
     padding: 3rem 5rem;
   }
 
